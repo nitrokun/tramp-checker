@@ -307,10 +307,18 @@ export default async function Home() {
                     <span style={{ color: '#B4453A', fontWeight: 700, fontSize: '1rem' }}>
                       確信度 {Math.round(item.confidence * 100)}%
                     </span>
-                    <span style={{ color: '#8C8278', fontSize: '0.875rem' }} className="ml-auto">
-                      {SOURCE_LABEL[stmt?.source ?? ''] ?? stmt?.source}
-                      {stmt?.stated_at ? ` · ${timeAgo(stmt.stated_at)}` : ''}
-                    </span>
+                    {stmt?.source_url ? (
+                      <a href={stmt.source_url} target="_blank" rel="noopener noreferrer"
+                        style={{ color: '#8C8278', fontSize: '0.875rem' }} className="ml-auto">
+                        {SOURCE_LABEL[stmt?.source ?? ''] ?? stmt?.source}
+                        {stmt?.stated_at ? ` · ${timeAgo(stmt.stated_at)}` : ''}
+                      </a>
+                    ) : (
+                      <span style={{ color: '#8C8278', fontSize: '0.875rem' }} className="ml-auto">
+                        {SOURCE_LABEL[stmt?.source ?? ''] ?? stmt?.source}
+                        {stmt?.stated_at ? ` · ${timeAgo(stmt.stated_at)}` : ''}
+                      </span>
+                    )}
                   </div>
 
                   {/* 発言要約（日本語） */}
