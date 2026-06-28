@@ -105,16 +105,13 @@ export default async function Home() {
 
   const sectors = (rawSectors ?? []) as unknown as SectorRow[]
 
-  // 今日の発言数
-  const todayStart = new Date()
-  todayStart.setHours(0, 0, 0, 0)
-  const { count: todayCount } = await supabase
+  // 直近24h ローリングウィンドウ（発言数・センチメント共通）
+  const since24h = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString()
+
+  const { count: count24h } = await supabase
     .from('statements')
     .select('id', { count: 'exact', head: true })
-    .gte('stated_at', todayStart.toISOString())
-
-  // 直近24h センチメント集計
-  const since24h = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString()
+    .gte('stated_at', since24h)
   const { data: recentJ } = await supabase
     .from('judgements')
     .select('sentiment')
@@ -217,10 +214,10 @@ export default async function Home() {
 
           <div>
             <div style={{ fontSize: '2.75rem', fontWeight: 900, lineHeight: 1 }}>
-              {todayCount ?? 0}
+              {count24h ?? 0}
             </div>
             <div className="text-sm mt-1 tracking-wide" style={{ opacity: 0.8 }}>
-              今日の発言数
+              直近24h 発言数
             </div>
           </div>
 
