@@ -22,11 +22,14 @@ export async function POST(req: NextRequest) {
   const supabase = db()
   const stats = { fetched: 0, inserted: 0, skipped: 0 }
 
+  const deadline = Date.now() + 7_000  // Vercel 10s 制限に対して 7s で打ち切り
+
   try {
     const items = await fetchStatements()
     stats.fetched = items.length
 
     for (const item of items) {
+      if (Date.now() > deadline) break  // 残り時間不足なら次回 Cron に回す
       const normalized = normalizeContent(item.contentEn)
       if (!normalized) { stats.skipped++; continue }
 

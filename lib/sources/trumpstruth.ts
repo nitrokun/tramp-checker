@@ -39,7 +39,7 @@ export async function fetchStatements(): Promise<RawStatement[]> {
 
   const res = await fetch(feedUrl, {
     headers: { 'User-Agent': 'TrumpChecker/1.0 (contest submission)' },
-    signal: AbortSignal.timeout(15_000),
+    signal: AbortSignal.timeout(8_000),
   })
   if (!res.ok) throw new Error(`RSS fetch failed: HTTP ${res.status} ${feedUrl}`)
 
