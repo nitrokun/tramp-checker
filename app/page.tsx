@@ -170,7 +170,7 @@ export default async function Home() {
 
               <div className="leading-none mb-4">
                 <span style={{ fontSize: '6rem', fontWeight: 900, color: '#1E1B16', lineHeight: 1 }}>
-                  16
+                  19
                 </span>
                 <span style={{ fontSize: '2.25rem', fontWeight: 700, color: '#1E1B16' }}>回</span>
                 <span style={{ fontSize: '1.7rem', color: '#5C564A' }}>/日</span>
@@ -187,7 +187,7 @@ export default async function Home() {
               </p>
 
               <p style={{ color: '#5C564A', fontSize: '0.8rem' }}>
-                ※ AFP 2025年1〜7月 投稿2,800件超の分析に基づく平均値
+                ※ Financial Times / Daily Beast 2026年調査に基づく平均値
               </p>
             </div>
 
