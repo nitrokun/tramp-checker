@@ -95,7 +95,11 @@ export default async function Home() {
     .order('created_at', { ascending: false })
     .limit(20)
 
-  const feed = (rawFeed ?? []) as unknown as FeedItem[]
+  const feed = (rawFeed ?? []).sort((a, b) => {
+    const da = (a as any).statements?.stated_at ?? (a as any).created_at
+    const db = (b as any).statements?.stated_at ?? (b as any).created_at
+    return new Date(db).getTime() - new Date(da).getTime()
+  }) as unknown as FeedItem[]
 
   // 業種ヒートマップ
   const { data: rawSectors } = await supabase
