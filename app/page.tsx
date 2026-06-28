@@ -137,44 +137,67 @@ export default async function Home() {
     <main>
 
       {/* ① ヒーロー ─────────────────────────────── */}
-      <section style={{ backgroundColor: '#F4F1EA', ...GRID_BG }}>
-        <div className="max-w-5xl mx-auto px-6 py-20">
-          <div className="flex flex-col sm:flex-row items-start gap-12">
+      <section style={{ backgroundColor: '#F4F1EA', ...GRID_BG, overflow: 'hidden' }}>
+        <div className="max-w-5xl mx-auto px-6 pt-16" style={{ paddingBottom: 0 }}>
+          <div style={{ display: 'flex', alignItems: 'flex-end', gap: '2rem' }}>
 
-            <div className="flex-1">
-              <div style={{ backgroundColor: '#B4453A', color: '#fff' }}
-                className="inline-block text-xs font-bold px-3 py-1 mb-6 tracking-widest">
-                TRUMP CHECKER
+            {/* 左カラム */}
+            <div style={{ flex: 1, paddingBottom: '4rem' }}>
+
+              {/* 大型タイトル */}
+              <div style={{ lineHeight: 0.88, marginBottom: '2rem' }}>
+                <div style={{
+                  fontSize: '5.5rem', fontWeight: 900, color: '#B4453A',
+                  letterSpacing: '-0.03em', fontStyle: 'italic',
+                }}>
+                  TRUMP
+                </div>
+                <div style={{
+                  fontSize: '5.5rem', fontWeight: 900, color: '#1E1B16',
+                  letterSpacing: '-0.03em',
+                }}>
+                  CHECKER
+                </div>
               </div>
 
               <div className="leading-none mb-4">
                 <span style={{ fontSize: '6rem', fontWeight: 900, color: '#1E1B16', lineHeight: 1 }}>
                   16
                 </span>
-                <span style={{ fontSize: '2rem', fontWeight: 700, color: '#1E1B16' }}>回</span>
-                <span style={{ fontSize: '1.5rem', color: '#5C564A' }}>/日</span>
+                <span style={{ fontSize: '2.25rem', fontWeight: 700, color: '#1E1B16' }}>回</span>
+                <span style={{ fontSize: '1.7rem', color: '#5C564A' }}>/日</span>
               </div>
 
-              <h1 style={{ fontSize: '2rem', fontWeight: 700, color: '#1E1B16', lineHeight: 1.3 }}
+              <h1 style={{ fontSize: '2.25rem', fontWeight: 700, color: '#1E1B16', lineHeight: 1.3 }}
                 className="mb-4">
                 市場は、その度に動く。
               </h1>
 
-              <p style={{ color: '#5C564A' }} className="text-sm leading-relaxed mb-8 max-w-md">
+              <p style={{ color: '#5C564A' }} className="text-base leading-relaxed mb-8 max-w-md">
                 トランプ大統領の発言をAIがリアルタイムで収集・判定。
                 個人投資家が一喜一憂する前に、業種別の影響を可視化します。
               </p>
 
-              <p style={{ color: '#5C564A', fontSize: '0.7rem' }}>
+              <p style={{ color: '#5C564A', fontSize: '0.8rem' }}>
                 ※ AFP 2025年1〜7月 投稿2,800件超の分析に基づく平均値
               </p>
             </div>
 
-            {/* 右カラム：ビジュアル */}
-            <div className="hidden sm:flex flex-shrink-0 w-56 h-56 items-center justify-center"
-              style={{ backgroundColor: '#1E1B16' }}>
-              <span style={{ fontSize: '5rem', opacity: 0.12, userSelect: 'none' }}>👁</span>
-            </div>
+            {/* 右カラム：トランプ画像（セクション下端まで伸ばす） */}
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/tramp_amekomi.png"
+              alt="TRUMP"
+              className="hidden sm:block"
+              style={{
+                width: '400px',
+                height: 'auto',
+                display: 'block',
+                flexShrink: 0,
+                filter: 'drop-shadow(-16px 0 32px rgba(0,0,0,0.35))',
+                alignSelf: 'flex-end',
+              }}
+            />
 
           </div>
         </div>
@@ -185,28 +208,28 @@ export default async function Home() {
         <div className="max-w-5xl mx-auto grid grid-cols-3 gap-4 text-center text-white">
 
           <div>
-            <div style={{ fontSize: '2.5rem', fontWeight: 900, lineHeight: 1 }}>
+            <div style={{ fontSize: '2.75rem', fontWeight: 900, lineHeight: 1 }}>
               {todayCount ?? 0}
             </div>
-            <div className="text-xs mt-1 tracking-wide" style={{ opacity: 0.8 }}>
+            <div className="text-sm mt-1 tracking-wide" style={{ opacity: 0.8 }}>
               今日の発言数
             </div>
           </div>
 
           <div>
-            <div style={{ fontSize: '1.25rem', fontWeight: 900 }}>
+            <div style={{ fontSize: '1.4rem', fontWeight: 900 }}>
               {dominant ? `${dominant.icon} ${dominant.label}` : '---'}
             </div>
-            <div className="text-xs mt-1 tracking-wide" style={{ opacity: 0.8 }}>
+            <div className="text-sm mt-1 tracking-wide" style={{ opacity: 0.8 }}>
               {total24h > 0 ? '直近24h センチメント' : '直近センチメント'}
             </div>
           </div>
 
           <div>
-            <div style={{ fontSize: '2.5rem', fontWeight: 900, lineHeight: 1 }}>
+            <div style={{ fontSize: '2.75rem', fontWeight: 900, lineHeight: 1 }}>
               {negRate}%
             </div>
-            <div className="text-xs mt-1 tracking-wide" style={{ opacity: 0.8 }}>
+            <div className="text-sm mt-1 tracking-wide" style={{ opacity: 0.8 }}>
               ネガティブ判定率
             </div>
           </div>
@@ -217,10 +240,10 @@ export default async function Home() {
       {/* ③ 業種ヒートマップ ──────────────────────── */}
       <section style={{ backgroundColor: '#EFE7DC' }} className="py-16 px-6">
         <div className="max-w-5xl mx-auto">
-          <h2 style={{ color: '#1E1B16', fontWeight: 700, fontSize: '1.1rem' }} className="mb-1">
+          <h2 style={{ color: '#1E1B16', fontWeight: 700, fontSize: '1.25rem' }} className="mb-1">
             業種別 影響ヒートマップ
           </h2>
-          <p style={{ color: '#5C564A', fontSize: '0.8rem' }} className="mb-8">
+          <p style={{ color: '#5C564A', fontSize: '0.9rem' }} className="mb-8">
             直近の発言が各業種に与えた影響の集積（色・矢印・回数の三重表示）
           </p>
 
@@ -236,14 +259,14 @@ export default async function Home() {
               const arrow   = net === 'positive' ? '↑' : net === 'negative' ? '↓' : '→'
               return (
                 <div key={s.code} style={{ backgroundColor: bg, color }} className="p-4">
-                  <div style={{ fontSize: '0.7rem', fontWeight: 700, opacity: 0.8 }}>
+                  <div style={{ fontSize: '0.8rem', fontWeight: 700, opacity: 0.8 }}>
                     {arrow} ×{impacts.length}回
                   </div>
-                  <div style={{ fontSize: '0.85rem', fontWeight: 700 }} className="mt-1 leading-tight">
+                  <div style={{ fontSize: '1rem', fontWeight: 700 }} className="mt-1 leading-tight">
                     {s.name_ja}
                   </div>
                   {impacts.length > 0 && (
-                    <div style={{ fontSize: '0.7rem', opacity: 0.7 }} className="mt-2">
+                    <div style={{ fontSize: '0.8rem', opacity: 0.7 }} className="mt-2">
                       ↑{pos} ↓{neg}
                     </div>
                   )}
@@ -257,10 +280,10 @@ export default async function Home() {
       {/* ④ 発言フィード ──────────────────────────── */}
       <section style={{ backgroundColor: '#1E1B16' }} className="py-16 px-6">
         <div className="max-w-5xl mx-auto">
-          <h2 style={{ color: '#F4F1EA', fontWeight: 700, fontSize: '1.1rem' }} className="mb-1">
+          <h2 style={{ color: '#F4F1EA', fontWeight: 700, fontSize: '1.25rem' }} className="mb-1">
             最新 発言フィード
           </h2>
-          <p style={{ color: '#5C564A', fontSize: '0.8rem' }} className="mb-8">
+          <p style={{ color: '#B0A898', fontSize: '0.9rem' }} className="mb-8">
             AIによるリアルタイム市場影響判定
           </p>
 
@@ -278,20 +301,20 @@ export default async function Home() {
                   {/* ヘッダー行 */}
                   <div className="flex items-center flex-wrap gap-3 mb-3">
                     <span style={{ backgroundColor: s.bg, color: s.color }}
-                      className="text-xs font-bold px-3 py-1 inline-block">
+                      className="text-sm font-bold px-3 py-1 inline-block">
                       {s.icon} {s.label}
                     </span>
-                    <span style={{ color: '#B4453A', fontWeight: 700, fontSize: '0.85rem' }}>
+                    <span style={{ color: '#B4453A', fontWeight: 700, fontSize: '1rem' }}>
                       確信度 {Math.round(item.confidence * 100)}%
                     </span>
-                    <span style={{ color: '#5C564A', fontSize: '0.75rem' }} className="ml-auto">
+                    <span style={{ color: '#8C8278', fontSize: '0.875rem' }} className="ml-auto">
                       {SOURCE_LABEL[stmt?.source ?? ''] ?? stmt?.source}
                       {stmt?.stated_at ? ` · ${timeAgo(stmt.stated_at)}` : ''}
                     </span>
                   </div>
 
                   {/* 発言要約（日本語） */}
-                  <p style={{ color: '#F4F1EA', fontSize: '0.875rem', lineHeight: 1.75 }}
+                  <p style={{ color: '#F4F1EA', fontSize: '1rem', lineHeight: 1.75 }}
                     className="mb-3">
                     {stmt?.content_ja ?? '（日本語要約なし）'}
                   </p>
@@ -299,7 +322,7 @@ export default async function Home() {
                   {/* 市場影響見立て */}
                   {item.impact_summary && (
                     <p style={{
-                      color: '#5C564A', fontSize: '0.75rem', lineHeight: 1.6,
+                      color: '#C8C0B4', fontSize: '0.875rem', lineHeight: 1.6,
                       borderLeft: '2px solid #B4453A', paddingLeft: '0.75rem',
                     }} className="mb-3">
                       {item.impact_summary}
@@ -313,7 +336,7 @@ export default async function Home() {
                         const dir = DIRECTION[imp.direction as keyof typeof DIRECTION] ?? DIRECTION.neutral
                         return (
                           <span key={imp.sector_code}
-                            style={{ backgroundColor: dir.bg, color: '#fff', fontSize: '0.7rem' }}
+                            style={{ backgroundColor: dir.bg, color: '#fff', fontSize: '0.8rem' }}
                             className="px-2 py-1 font-medium">
                             {dir.icon} {imp.sectors?.name_ja ?? imp.sector_code}
                           </span>
@@ -333,12 +356,12 @@ export default async function Home() {
       <footer style={{ backgroundColor: '#1E1B16', borderTop: '1px solid #2C2820' }}
         className="py-10 px-6">
         <div className="max-w-5xl mx-auto">
-          <p style={{ color: '#5C564A', fontSize: '0.7rem', lineHeight: 1.8 }}>
+          <p style={{ color: '#5C564A', fontSize: '0.8rem', lineHeight: 1.8 }}>
             本サイトは特定の金融商品の売買を推奨するものではなく、公開情報に基づく
             一般的な市況情報の提供を目的としています。投資の最終判断はご自身の責任で
             行ってください。
           </p>
-          <p style={{ color: '#5C564A', fontSize: '0.7rem', marginTop: '0.5rem' }}>
+          <p style={{ color: '#5C564A', fontSize: '0.8rem', marginTop: '0.5rem' }}>
             © 2026 トランプチェッカー
           </p>
         </div>
