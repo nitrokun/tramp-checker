@@ -20,7 +20,7 @@ export async function POST(req: NextRequest) {
   }
 
   const supabase = db()
-  const stats = { fetched: 0, inserted: 0, skipped: 0 }
+  const stats = { fetched: 0, inserted: 0, skipped: 0, deleted: 0 }
 
   const deadline = Date.now() + 7_000  // Vercel 10s 制限に対して 7s で打ち切り
 
@@ -62,6 +62,15 @@ export async function POST(req: NextRequest) {
 
       stats.inserted++
     }
+
+    // 古いデータの削除（judgements/judgement_sector_impacts は CASCADE で連鎖削除）
+    const retentionDays = Number(process.env.DATA_RETENTION_DAYS ?? '30')
+    const cutoff = new Date(Date.now() - retentionDays * 24 * 60 * 60 * 1000)
+    const { count: deleted } = await supabase
+      .from('statements')
+      .delete({ count: 'exact' })
+      .lt('stated_at', cutoff.toISOString())
+    stats.deleted = deleted ?? 0
 
     return NextResponse.json(stats)
   } catch (e) {

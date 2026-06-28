@@ -93,7 +93,7 @@ export default async function Home() {
       )
     `)
     .order('created_at', { ascending: false })
-    .limit(10)
+    .limit(20)
 
   const feed = (rawFeed ?? []) as unknown as FeedItem[]
 
