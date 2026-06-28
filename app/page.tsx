@@ -374,7 +374,15 @@ export default async function Home() {
             一般的な市況情報の提供を目的としています。投資の最終判断はご自身の責任で
             行ってください。
           </p>
-          <p style={{ color: '#5C564A', fontSize: '0.8rem', marginTop: '0.5rem' }}>
+          <p style={{
+            color: '#4A4540', fontSize: '0.75rem', lineHeight: 1.8,
+            marginTop: '1rem', borderTop: '1px solid #2C2820', paddingTop: '1rem',
+          }}>
+            本サービスはAIによる自動分析であり、投資助言を目的としたものではありません。
+            掲載情報に基づく投資判断および損失について、当サービスは一切の責任を負いません。
+            投資は自己責任でお願いします。
+          </p>
+          <p style={{ color: '#5C564A', fontSize: '0.8rem', marginTop: '0.75rem' }}>
             © 2026 トランプチェッカー
           </p>
         </div>
