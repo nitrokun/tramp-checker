@@ -375,7 +375,7 @@ export default async function Home() {
             行ってください。
           </p>
           <p style={{
-            color: '#4A4540', fontSize: '0.75rem', lineHeight: 1.8,
+            color: '#9C9488', fontSize: '0.75rem', lineHeight: 1.8,
             marginTop: '1rem', borderTop: '1px solid #2C2820', paddingTop: '1rem',
           }}>
             本サービスはAIによる自動分析であり、投資助言を目的としたものではありません。
