@@ -59,6 +59,14 @@ type SectorRow = {
 }
 
 // ── ユーティリティ ────────────────────────────────────
+function safeHref(url: string | null): string | null {
+  if (!url) return null
+  try {
+    const u = new URL(url)
+    return (u.protocol === 'https:' || u.protocol === 'http:') ? u.toString() : null
+  } catch { return null }
+}
+
 function timeAgo(dateStr: string): string {
   const diffMs = Date.now() - new Date(dateStr).getTime()
   const mins  = Math.floor(diffMs / 60_000)
@@ -307,8 +315,8 @@ export default async function Home() {
                     <span style={{ color: '#B4453A', fontWeight: 700, fontSize: '1rem' }}>
                       確信度 {Math.round(item.confidence * 100)}%
                     </span>
-                    {stmt?.source_url ? (
-                      <a href={stmt.source_url} target="_blank" rel="noopener noreferrer"
+                    {safeHref(stmt?.source_url ?? null) ? (
+                      <a href={safeHref(stmt?.source_url ?? null)!} target="_blank" rel="noopener noreferrer"
                         style={{ color: '#8C8278', fontSize: '0.875rem' }} className="ml-auto">
                         {SOURCE_LABEL[stmt?.source ?? ''] ?? stmt?.source}
                         {stmt?.stated_at ? ` · ${timeAgo(stmt.stated_at)}` : ''}
