@@ -369,7 +369,7 @@ export default async function Home() {
       <footer style={{ backgroundColor: '#1E1B16', borderTop: '1px solid #2C2820' }}
         className="py-10 px-6">
         <div className="max-w-5xl mx-auto">
-          <p style={{ color: '#5C564A', fontSize: '0.8rem', lineHeight: 1.8 }}>
+          <p style={{ color: '#9C9488', fontSize: '0.8rem', lineHeight: 1.8 }}>
             本サイトは特定の金融商品の売買を推奨するものではなく、公開情報に基づく
             一般的な市況情報の提供を目的としています。投資の最終判断はご自身の責任で
             行ってください。
