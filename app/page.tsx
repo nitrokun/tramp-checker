@@ -314,7 +314,7 @@ export default async function Home() {
                       {s.icon} {s.label}
                     </span>
                     <span style={{ color: '#B4453A', fontWeight: 700, fontSize: '1rem' }}>
-                      確信度 {Math.round(item.confidence * 100)}%
+                      影響度 {Math.round(item.confidence * 100)}%
                     </span>
                     {safeHref(stmt?.source_url ?? null) ? (
                       <a href={safeHref(stmt?.source_url ?? null)!} target="_blank" rel="noopener noreferrer"
