@@ -37,7 +37,7 @@ async function judgeStatement(
     temperature: 0,
     messages: [{
       role: 'user',
-      content: `あなたは市場影響アナリストです。以下のトランプ大統領の発言を分析し、JSONのみを返してください（説明文不要）。
+      content: `あなたは日本の市場影響アナリストです。以下のトランプ大統領の発言が日本株・ドル円・日本企業に与える影響を分析し、JSONのみを返してください（説明文不要）。
 
 ## 発言（英語）
 ${contentEn}
