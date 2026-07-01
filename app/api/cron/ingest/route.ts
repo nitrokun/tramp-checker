@@ -28,6 +28,22 @@ export async function POST(req: NextRequest) {
     const items = await fetchStatements()
     stats.fetched = items.length
 
+    // 正常フェッチできたのに有効item（pubDate有り）が0件 = フィード形式変更等で
+    // 全件スキップし無言で凍結している可能性。検知用に warning を1行残す。
+    // 監視用の書き込みは本体より優先度が低い。insert失敗でingestを止めない
+    // （500化してcronに「ingest失敗」と誤認されるのを防ぐ）。
+    if (items.length === 0) {
+      try {
+        await supabase.from('logs').insert({
+          level: 'warn', context: 'ingest/empty',
+          message: 'RSS fetch succeeded but 0 valid items (pubDate present) were parsed — possible feed format change',
+          meta: { feedUrl: process.env.RSS_FEED_URL ?? 'https://www.trumpstruth.org/feed' },
+        })
+      } catch (logErr) {
+        console.error('ingest/empty warning log failed:', logErr)
+      }
+    }
+
     for (const item of items) {
       if (Date.now() > deadline) break  // 残り時間不足なら次回 Cron に回す
       const normalized = normalizeContent(item.contentEn)
