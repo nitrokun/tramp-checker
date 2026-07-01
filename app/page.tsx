@@ -1,4 +1,5 @@
 import { supabase } from '@/lib/supabase'
+import LiveClock from '@/app/components/LiveClock'
 
 // アクセスごとに最新DBを読む（ビルド時スナップショットで固定しない）
 export const dynamic = 'force-dynamic'
@@ -181,6 +182,10 @@ export default async function Home() {
                 </span>
                 <span style={{ fontSize: '2.25rem', fontWeight: 700, color: '#1E1B16' }}>回</span>
                 <span style={{ fontSize: '1.7rem', color: '#5C564A' }}>/日</span>
+              </div>
+
+              <div className="mb-4">
+                <LiveClock />
               </div>
 
               <h1 style={{ fontSize: '2.25rem', fontWeight: 700, color: '#1E1B16', lineHeight: 1.3 }}
