@@ -64,8 +64,11 @@ export async function fetchStatements(): Promise<RawStatement[]> {
     const contentEn = decodeHtml(stripHtml(rawContent))
     if (!contentEn) continue
 
+    // pubDate（＝実投稿時刻）が取れない item は「今」で埋めず取り込まない。
+    // フォールバックで new Date() を入れると、昨日の発言が「22分前」等の誤表示になるため。
     const pubDateStr = extractTag(block, 'pubDate')
-    const statedAt   = pubDateStr ? new Date(pubDateStr) : new Date()
+    if (!pubDateStr) continue
+    const statedAt = new Date(pubDateStr)
     if (isNaN(statedAt.getTime())) continue
 
     const sourceUrl = extractTag(block, 'link') || guid
