@@ -1,5 +1,8 @@
 import { supabase } from '@/lib/supabase'
 
+// アクセスごとに最新DBを読む（ビルド時スナップショットで固定しない）
+export const dynamic = 'force-dynamic'
+
 // ── 定数 ──────────────────────────────────────────────
 const SENTIMENT = {
   positive: { label: 'ポジティブ', icon: '↑', bg: '#557263', color: '#fff' },
