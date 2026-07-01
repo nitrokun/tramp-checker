@@ -105,9 +105,12 @@ export default async function Home() {
   }) as unknown as FeedItem[]
 
   // 業種ヒートマップ
+  // ヒートマップは v2 判定のみ集計。v1(direction=日本株影響)とv2(=米国セクター影響)は
+  // 意味が異なり、混ぜると「米国セクター」ラベルと矛盾するため v2 に限定する。
   const { data: rawSectors } = await supabase
     .from('sectors')
-    .select('code, name_ja, display_order, judgement_sector_impacts ( direction )')
+    .select('code, name_ja, display_order, judgement_sector_impacts ( direction, judgements!inner ( prompt_version ) )')
+    .eq('judgement_sector_impacts.judgements.prompt_version', 'v2')
     .order('display_order')
 
   const sectors = (rawSectors ?? []) as unknown as SectorRow[]
@@ -253,10 +256,10 @@ export default async function Home() {
       <section style={{ backgroundColor: '#EFE7DC' }} className="py-16 px-6">
         <div className="max-w-5xl mx-auto">
           <h2 style={{ color: '#1E1B16', fontWeight: 700, fontSize: '1.25rem' }} className="mb-1">
-            業種別 影響ヒートマップ
+            米国セクター別 影響ヒートマップ
           </h2>
           <p style={{ color: '#5C564A', fontSize: '0.9rem' }} className="mb-8">
-            直近の発言が各業種に与えた影響の集積（色・矢印・回数の三重表示）
+            トランプ発言が各米国セクターに与えた直接影響の集積（色・矢印・回数の三重表示）
           </p>
 
           <div className="grid gap-3"
@@ -339,20 +342,31 @@ export default async function Home() {
                     {stmt?.content_ja ?? '（日本語要約なし）'}
                   </p>
 
-                  {/* 市場影響見立て */}
+                  {/* 市場影響見立て（日本株への波及ゾーン） */}
                   {item.impact_summary && (
-                    <p style={{
-                      color: '#C8C0B4', fontSize: '0.875rem', lineHeight: 1.6,
-                      borderLeft: '2px solid #B4453A', paddingLeft: '0.75rem',
-                    }} className="mb-3">
-                      {item.impact_summary}
-                    </p>
+                    <div className="mb-3">
+                      <div style={{ color: '#8C8278', fontSize: '0.7rem', fontWeight: 700 }}
+                        className="mb-1">
+                        🇯🇵 日本株への波及
+                      </div>
+                      <p style={{
+                        color: '#C8C0B4', fontSize: '0.875rem', lineHeight: 1.6,
+                        borderLeft: '2px solid #B4453A', paddingLeft: '0.75rem',
+                      }}>
+                        {item.impact_summary}
+                      </p>
+                    </div>
                   )}
 
-                  {/* 業種チップ */}
+                  {/* 業種チップ（米国セクターへの直接影響ゾーン） */}
                   {impacts.length > 0 && (
-                    <div className="flex flex-wrap gap-2">
-                      {impacts.map(imp => {
+                    <div>
+                      <div style={{ color: '#8C8278', fontSize: '0.7rem', fontWeight: 700 }}
+                        className="mb-1">
+                        🇺🇸 米国セクターへの直接影響
+                      </div>
+                      <div className="flex flex-wrap gap-2">
+                        {impacts.map(imp => {
                         const dir = DIRECTION[imp.direction as keyof typeof DIRECTION] ?? DIRECTION.neutral
                         return (
                           <span key={imp.sector_code}
@@ -362,6 +376,7 @@ export default async function Home() {
                           </span>
                         )
                       })}
+                      </div>
                     </div>
                   )}
 

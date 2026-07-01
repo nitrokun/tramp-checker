@@ -1,7 +1,7 @@
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 import Anthropic from 'npm:@anthropic-ai/sdk'
 
-const PROMPT_VERSION = 'v1'
+const PROMPT_VERSION = 'v2'
 const VALID_SENTIMENTS = new Set(['positive', 'negative', 'neutral'])
 const VALID_DIRECTIONS  = new Set(['positive', 'negative', 'neutral'])
 
@@ -37,7 +37,12 @@ async function judgeStatement(
     temperature: 0,
     messages: [{
       role: 'user',
-      content: `あなたは日本の市場影響アナリストです。以下のトランプ大統領の発言が日本株・ドル円・日本企業に与える影響を分析し、JSONのみを返してください（説明文不要）。
+      content: `あなたは米国市場を主に分析し、その日本株への波及を評価するアナリストです。以下のトランプ大統領の発言について、二段階で影響を評価し、JSONのみを返してください（説明文不要）。
+
+## 分析手順（必ずこの順序で推論すること）
+1. まず発言が「米国市場・米国セクター」に与える直接的な影響を評価する。
+2. 次にその影響が「ドル円（為替）」と「米国景気」を経由して、日本株にどう波及するかを評価する。
+3. 波及が乏しい場合は無理に影響を作らず、「日本への波及は限定的」と明示してよい。
 
 ## 発言（英語）
 ${contentEn}
@@ -51,16 +56,21 @@ ${sectorList}
   "sentiment":      "positive | negative | neutral",
   "confidence":     0.00,
   "sector_impacts": [
-    { "sector_code": "（上記マスタの code のみ）", "direction": "positive | negative | neutral", "note": "30字以内・事実ベース" }
+    { "sector_code": "（上記マスタの code のみ）", "direction": "positive | negative | neutral", "note": "米国セクターへの影響・30字以内・事実ベース" }
   ],
-  "impact_summary": "日本株・ドル円への波及見立て（100字以内）",
-  "rationale":      "判定根拠（150字以内・事実ベース・中立）"
+  "impact_summary": "冒頭に『ドル円: 円安/円高/中立 ・ 日本株波及: 強い/中/限定的』を必ず記し、続けて波及見立てを述べる（120字以内）",
+  "rationale":      "米国市場→ドル円・米国景気→日本株、という二段階推論の根拠（150字以内・事実ベース・中立）"
 }
+
+## 各フィールドの視点（重要）
+- sector_impacts.direction … 手順1で評価した「米国セクター」への影響方向（日本株ではなく米国側）
+- sentiment            … 手順2で評価した「日本株全体」への波及方向
+- impact_summary       … ドル円方向と日本株波及度を冒頭に明記したうえでの波及見立て
 
 ## 制約
 - sentiment / direction は positive / negative / neutral の3値のみ
 - confidence は 0.00〜1.00
-- sector_impacts は影響が明確な業種のみ（最大5件）。市場と無関係なら []
+- sector_impacts は影響が明確な米国セクターのみ（最大5件）。無関係なら []
 - sector_code はマスタの code 値のみ。自由生成・新造禁止
 - 「買い」「売り」「推奨」等の売買指示表現禁止
 - 個別銘柄名の出力禁止`,
